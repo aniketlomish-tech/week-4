@@ -1,0 +1,140 @@
+public class StringBuilderToolkit {
+
+    static String reverse(String text) {
+        if (text == null) {
+            return null;
+        }
+        StringBuilder builder = new StringBuilder(text);
+        return builder.reverse().toString();
+    }
+
+    static String repeat(String text, int count) {
+        if (text == null) {
+            return null;
+        }
+        if (count < 0) {
+            throw new IllegalArgumentException("Count must not be negative.");
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            builder.append(text);
+        }
+        return builder.toString();
+    }
+
+    static String joinWords(String[] words, String separator) {
+        if (words == null) {
+            return null;
+        }
+        String actualSeparator = (separator == null) ? "" : separator;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            builder.append(words[i]);
+            if (i < words.length - 1) {
+                builder.append(actualSeparator);
+            }
+        }
+        return builder.toString();
+    }
+
+    static String removeCharacterAt(String text, int index) {
+        if (text == null) {
+            return null;
+        }
+        if (index < 0 || index >= text.length()) {
+            throw new StringIndexOutOfBoundsException(
+                    "Index " + index + " is out of bounds for length " + text.length());
+        }
+        StringBuilder builder = new StringBuilder(text);
+        builder.deleteCharAt(index);
+        return builder.toString();
+    }
+
+    static String replaceCharacterAt(String text, int index, char replacement) {
+        if (text == null) {
+            return null;
+        }
+        if (index < 0 || index >= text.length()) {
+            throw new StringIndexOutOfBoundsException(
+                    "Index " + index + " is out of bounds for length " + text.length());
+        }
+        StringBuilder builder = new StringBuilder(text);
+        builder.setCharAt(index, replacement);
+        return builder.toString();
+    }
+
+    static String buildNumberedList(String[] items) {
+        if (items == null) {
+            return null;
+        }
+        if (items.length == 0) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < items.length; i++) {
+            StringBuilder line = new StringBuilder();
+            line.append(items[i]);
+            line.insert(0, (i + 1) + ". ");
+            result.append(line);
+            result.append('\n');
+        }
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("--- reverse ---");
+        System.out.println("reverse(\"hello\"): " + reverse("hello"));
+        System.out.println("reverse(\"\"): '" + reverse("") + "'");
+        System.out.println("reverse(null): " + reverse(null));
+
+        System.out.println("\n--- repeat ---");
+        System.out.println("repeat(\"ab\", 3): " + repeat("ab", 3));
+        System.out.println("repeat(\"ab\", 0): '" + repeat("ab", 0) + "'");
+        try {
+            repeat("ab", -1);
+        } catch (IllegalArgumentException e) {
+            System.out.println("repeat(\"ab\", -1) threw: " + e.getMessage());
+        }
+        System.out.println("repeat(null, 3): " + repeat(null, 3));
+
+        System.out.println("\n--- joinWords ---");
+        String[] words = {"one", "two", "three"};
+        System.out.println("joinWords({\"one\",\"two\",\"three\"}, \", \"): "
+                + joinWords(words, ", "));
+        System.out.println("joinWords({}, \", \"): '" + joinWords(new String[0], ", ") + "'");
+        System.out.println("joinWords({\"a\",\"b\"}, null): '" + joinWords(new String[]{"a", "b"}, null) + "'");
+        System.out.println("joinWords(null, \", \"): " + joinWords(null, ", "));
+
+        System.out.println("\n--- removeCharacterAt ---");
+        System.out.println("removeCharacterAt(\"hello\", 1): " + removeCharacterAt("hello", 1));
+        try {
+            removeCharacterAt("hello", 10);
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println("removeCharacterAt(\"hello\", 10) threw: " + e.getMessage());
+        }
+        System.out.println("removeCharacterAt(null, 0): " + removeCharacterAt(null, 0));
+
+        System.out.println("\n--- replaceCharacterAt ---");
+        System.out.println("replaceCharacterAt(\"hello\", 0, 'H'): " + replaceCharacterAt("hello", 0, 'H'));
+        try {
+            replaceCharacterAt("hello", -1, 'H');
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println("replaceCharacterAt(\"hello\", -1, 'H') threw: " + e.getMessage());
+        }
+        System.out.println("replaceCharacterAt(null, 0, 'H'): " + replaceCharacterAt(null, 0, 'H'));
+
+        System.out.println("\n--- buildNumberedList ---");
+        String[] items = {"Buy milk", "Walk dog", "Write code"};
+        System.out.println(buildNumberedList(items));
+        System.out.println("buildNumberedList({}): '" + buildNumberedList(new String[0]) + "'");
+        System.out.println("buildNumberedList(null): " + buildNumberedList(null));
+
+        System.out.println("\n--- Demonstrating String immutability after StringBuilder mutation ---");
+        StringBuilder mutableBuilder = new StringBuilder("snapshot");
+        String snapshot = mutableBuilder.toString();
+        mutableBuilder.append("-changed").reverse();
+        System.out.println("snapshot (captured before mutation): " + snapshot);
+        System.out.println("mutableBuilder (after further mutation): " + mutableBuilder);
+    }
+}
