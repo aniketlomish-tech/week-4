@@ -1,0 +1,121 @@
+class Product {
+    private String code;
+    private String name;
+    private double unitPrice;
+    private int quantity;
+    private static int productCount = 0;
+
+    public Product(String code, String name, double unitPrice) {
+        this(code, name, unitPrice, 0);
+    }
+
+    public Product(String code, String name, double unitPrice, int quantity) {
+        if (code == null || code.trim().isEmpty()) {
+            throw new IllegalArgumentException("Code must not be null or blank.");
+        }
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name must not be null or blank.");
+        }
+        if (unitPrice <= 0) {
+            throw new IllegalArgumentException("Unit price must be positive.");
+        }
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity must not be negative.");
+        }
+
+        this.code = code;
+        this.name = name;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+        productCount++;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public boolean restock(int amount) {
+        if (amount <= 0) {
+            return false;
+        }
+        quantity += amount;
+        return true;
+    }
+
+    public boolean sell(int amount) {
+        if (amount <= 0 || amount > quantity) {
+            return false;
+        }
+        quantity -= amount;
+        return true;
+    }
+
+    public double getInventoryValue() {
+        return unitPrice * quantity;
+    }
+
+    public static int getProductCount() {
+        return productCount;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", unitPrice=" + unitPrice +
+                ", quantity=" + quantity +
+                ", inventoryValue=" + getInventoryValue() +
+                '}';
+    }
+}
+
+public class ProductInventory {
+    public static void main(String[] args) {
+        Product product1 = new Product("P-001", "Wireless Mouse", 19.99);
+        Product product2 = new Product("P-002", "Mechanical Keyboard", 89.50, 15);
+        Product product3 = new Product("P-003", "USB-C Cable", 7.25, 100);
+
+        System.out.println("--- Initial products ---");
+        System.out.println(product1);
+        System.out.println(product2);
+        System.out.println(product3);
+
+        System.out.println("\nProduct count after creating 3 products: " + Product.getProductCount());
+
+        System.out.println("\n--- Restocking product1 (zero-quantity constructor) ---");
+        boolean restocked = product1.restock(50);
+        System.out.println("Restock of 50 succeeded: " + restocked);
+        System.out.println(product1);
+
+        System.out.println("\n--- Selling from product2 ---");
+        boolean sellValid = product2.sell(10);
+        System.out.println("Sell 10 succeeded: " + sellValid);
+
+        boolean sellExcessive = product2.sell(1000);
+        System.out.println("Sell 1000 (excessive) succeeded: " + sellExcessive);
+        System.out.println(product2);
+
+        System.out.println("\n--- Verifying independent quantities ---");
+        System.out.println(product1);
+        System.out.println(product2);
+        System.out.println(product3);
+
+        System.out.println("\n--- Creating one more product to confirm shared static count ---");
+        Product product4 = new Product("P-004", "Monitor Stand", 34.00, 8);
+        System.out.println(product4);
+        System.out.println("Product count after creating 4th product: " + Product.getProductCount());
+    }
+}
