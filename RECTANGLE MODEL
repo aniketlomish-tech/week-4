@@ -1,0 +1,82 @@
+class Rectangle {
+    private double width;
+    private double height;
+
+    public Rectangle() {
+        this(1, 1);
+        System.out.println("Rectangle() executed -> chained to Rectangle(double, double)");
+    }
+
+    public Rectangle(double side) {
+        this(side, side);
+        System.out.println("Rectangle(double) executed -> chained to Rectangle(double, double)");
+    }
+
+    public Rectangle(double width, double height) {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Width and height must be positive.");
+        }
+        this.width = width;
+        this.height = height;
+        System.out.println("Rectangle(double, double) executed -> fields initialized");
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public double getArea() {
+        return width * height;
+    }
+
+    public double getPerimeter() {
+        return 2 * (width + height);
+    }
+
+    public boolean isSquare() {
+        return width == height;
+    }
+
+    public void scale(double factor) {
+        if (factor <= 0) {
+            throw new IllegalArgumentException("Scale factor must be positive.");
+        }
+        width *= factor;
+        height *= factor;
+    }
+
+    @Override
+    public String toString() {
+        return "Rectangle{" +
+                "width=" + width +
+                ", height=" + height +
+                ", area=" + getArea() +
+                ", perimeter=" + getPerimeter() +
+                ", square=" + isSquare() +
+                '}';
+    }
+}
+
+public class RectangleModel {
+    public static void main(String[] args) {
+        System.out.println("--- Creating via no-argument constructor (1x1) ---");
+        Rectangle defaultRect = new Rectangle();
+        System.out.println(defaultRect);
+
+        System.out.println("\n--- Creating via one-argument constructor (square) ---");
+        Rectangle squareRect = new Rectangle(4);
+        System.out.println(squareRect);
+
+        System.out.println("\n--- Creating via two-argument constructor (rectangle) ---");
+        Rectangle rect = new Rectangle(3, 6);
+        System.out.println(rect);
+
+        System.out.println("\n--- Scaling the two-argument rectangle by 2.0 ---");
+        rect.scale(2.0);
+        System.out.println(rect);
+    }
+}
