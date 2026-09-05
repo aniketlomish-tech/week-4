@@ -1,0 +1,101 @@
+class Book {
+    private String title;
+    private String author;
+    private String bookCode;
+    private boolean loaned;
+
+    public Book(String title, String author, String bookCode) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title must not be null or blank.");
+        }
+        if (author == null || author.trim().isEmpty()) {
+            throw new IllegalArgumentException("Author must not be null or blank.");
+        }
+        if (bookCode == null || bookCode.trim().isEmpty()) {
+            throw new IllegalArgumentException("Book code must not be null or blank.");
+        }
+
+        this.title = title;
+        this.author = author;
+        this.bookCode = bookCode;
+        this.loaned = false;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getBookCode() {
+        return bookCode;
+    }
+
+    public boolean isAvailable() {
+        return !loaned;
+    }
+
+    public boolean borrowBook() {
+        if (loaned) {
+            return false;
+        }
+        loaned = true;
+        return true;
+    }
+
+    public boolean returnBook() {
+        if (!loaned) {
+            return false;
+        }
+        loaned = false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", bookCode='" + bookCode + '\'' +
+                ", available=" + isAvailable() +
+                '}';
+    }
+}
+
+public class BookLoan {
+    public static void main(String[] args) {
+        Book book1 = new Book("The Hobbit", "J.R.R. Tolkien", "BK-001");
+        Book book2 = new Book("Dune", "Frank Herbert", "BK-002");
+
+        System.out.println("--- Initial books ---");
+        System.out.println(book1);
+        System.out.println(book2);
+
+        System.out.println("\n--- Testing repeated borrowing on book1 ---");
+        boolean firstBorrow = book1.borrowBook();
+        System.out.println("First borrow of book1 succeeded: " + firstBorrow);
+
+        boolean secondBorrow = book1.borrowBook();
+        System.out.println("Second (repeated) borrow of book1 succeeded: " + secondBorrow);
+
+        System.out.println("book1 after borrow attempts: " + book1);
+
+        System.out.println("\n--- Testing return on book1 ---");
+        boolean returned = book1.returnBook();
+        System.out.println("Return of book1 succeeded: " + returned);
+        System.out.println("book1 after return: " + book1);
+
+        System.out.println("\n--- Testing return on an already available book (book2) ---");
+        boolean returnAvailable = book2.returnBook();
+        System.out.println("Return of already-available book2 succeeded: " + returnAvailable);
+        System.out.println("book2 after invalid return attempt: " + book2);
+
+        System.out.println("\n--- Testing independence of book1 and book2 ---");
+        boolean borrowBook2 = book2.borrowBook();
+        System.out.println("Borrow of book2 succeeded: " + borrowBook2);
+        System.out.println("book1 state: " + book1);
+        System.out.println("book2 state: " + book2);
+    }
+}
