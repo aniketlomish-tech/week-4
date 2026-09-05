@@ -1,0 +1,72 @@
+class ScoreBox {
+    private int score;
+
+    public ScoreBox(int score) {
+        if (!setScore(score)) {
+            throw new IllegalArgumentException("Score must not be negative.");
+        }
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public boolean setScore(int newScore) {
+        if (newScore < 0) {
+            return false;
+        }
+        this.score = newScore;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ScoreBox{score=" + score + '}';
+    }
+}
+
+public class ObjectReferenceLab {
+    static void addBonus(ScoreBox box, int bonus) {
+        box.setScore(box.getScore() + bonus);
+    }
+
+    static void replaceLocally(ScoreBox box) {
+        box = new ScoreBox(9999);
+        System.out.println("Inside replaceLocally, local parameter now points to: " + box);
+    }
+
+    static ScoreBox createScoreBox(int score) {
+        return new ScoreBox(score);
+    }
+
+    public static void main(String[] args) {
+        ScoreBox original = createScoreBox(50);
+        ScoreBox alias = original;
+
+        System.out.println("--- Two aliases to one ScoreBox ---");
+        System.out.println("original: " + original);
+        System.out.println("alias: " + alias);
+        System.out.println("original == alias: " + (original == alias));
+
+        System.out.println("\n--- Mutation through the alias ---");
+        addBonus(alias, 15);
+        System.out.println("After addBonus(alias, 15):");
+        System.out.println("original: " + original);
+        System.out.println("alias: " + alias);
+        System.out.println("original == alias: " + (original == alias));
+
+        System.out.println("\n--- A separate ScoreBox with the same score value ---");
+        ScoreBox separate = createScoreBox(65);
+        System.out.println("separate: " + separate);
+        System.out.println("original == separate: " + (original == separate));
+        System.out.println("original.getScore() == separate.getScore(): "
+                + (original.getScore() == separate.getScore()));
+
+        System.out.println("\n--- Reassigning the parameter inside replaceLocally ---");
+        System.out.println("original before call: " + original);
+        replaceLocally(original);
+        System.out.println("original after call: " + original);
+        System.out.println("original's reference was unaffected because replaceLocally only "
+                + "reassigned its own local copy of the reference, not the caller's variable.");
+    }
+}
