@@ -1,0 +1,87 @@
+public class StringFundamentals {
+
+    static boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
+    }
+
+    static String normalizeCourseCode(String code) {
+        return code.trim().toUpperCase();
+    }
+
+    static int countOccurrences(String text, char target) {
+        int count = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == target) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    static int lengthOfLastWord(String text) {
+        int i = text.length() - 1;
+        while (i >= 0 && text.charAt(i) == ' ') {
+            i--;
+        }
+        int length = 0;
+        while (i >= 0 && text.charAt(i) != ' ') {
+            length++;
+            i--;
+        }
+        return length;
+    }
+
+    static void reverseString(char[] characters) {
+        int left = 0;
+        int right = characters.length - 1;
+        while (left < right) {
+            char temp = characters[left];
+            characters[left] = characters[right];
+            characters[right] = temp;
+            left++;
+            right--;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("--- hasText ---");
+        System.out.println("hasText(null): " + hasText(null));
+        System.out.println("hasText(\"\"): " + hasText(""));
+        System.out.println("hasText(\"   \"): " + hasText("   "));
+        System.out.println("hasText(\"CS101\"): " + hasText("CS101"));
+
+        System.out.println("\n--- normalizeCourseCode ---");
+        System.out.println("normalizeCourseCode(\"  cs101  \"): '"
+                + normalizeCourseCode("  cs101  ") + "'");
+        System.out.println("normalizeCourseCode(\"\"): '" + normalizeCourseCode("") + "'");
+        System.out.println("normalizeCourseCode(\" a \"): '" + normalizeCourseCode(" a ") + "'");
+        System.out.println("normalizeCourseCode(\"cs101   \"): '"
+                + normalizeCourseCode("cs101   ") + "'");
+
+        System.out.println("\n--- countOccurrences ---");
+        System.out.println("countOccurrences(\"banana\", 'a'): " + countOccurrences("banana", 'a'));
+        System.out.println("countOccurrences(\"\", 'x'): " + countOccurrences("", 'x'));
+        System.out.println("countOccurrences(\"a\", 'a'): " + countOccurrences("a", 'a'));
+        System.out.println("countOccurrences(\"aa   \", ' '): " + countOccurrences("aa   ", ' '));
+
+        System.out.println("\n--- lengthOfLastWord ---");
+        System.out.println("lengthOfLastWord(\"Hello World\"): " + lengthOfLastWord("Hello World"));
+        System.out.println("lengthOfLastWord(\"\"): " + lengthOfLastWord(""));
+        System.out.println("lengthOfLastWord(\"a\"): " + lengthOfLastWord("a"));
+        System.out.println("lengthOfLastWord(\"   fly me   to   the moon  \"): "
+                + lengthOfLastWord("   fly me   to   the moon  "));
+
+        System.out.println("\n--- reverseString ---");
+        char[] normalCase = "hello".toCharArray();
+        reverseString(normalCase);
+        System.out.println("reverseString(\"hello\"): " + new String(normalCase));
+
+        char[] emptyCase = new char[0];
+        reverseString(emptyCase);
+        System.out.println("reverseString(\"\"): '" + new String(emptyCase) + "'");
+
+        char[] oneCharCase = "A".toCharArray();
+        reverseString(oneCharCase);
+        System.out.println("reverseString(\"A\"): '" + new String(oneCharCase) + "'");
+    }
+}
